@@ -1,45 +1,11 @@
-import org.jetbrains.compose.compose
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
-    kotlin("multiplatform")
-    id("org.jetbrains.compose")
+    //trick: for the same plugin versions in all sub-modules
+    id("com.android.application").version("7.4.2").apply(false)
+    id("com.android.library").version("7.4.2").apply(false)
+    kotlin("android").version("1.8.10").apply(false)
+    kotlin("multiplatform").version("1.8.10").apply(false)
 }
 
-group = "io.github.yoon6"
-version = "1.0-SNAPSHOT"
-
-repositories {
-    google()
-    mavenCentral()
-    maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-}
-
-kotlin {
-    jvm {
-        compilations.all {
-            kotlinOptions.jvmTarget = "11"
-        }
-        withJava()
-    }
-    sourceSets {
-        val jvmMain by getting {
-            dependencies {
-                implementation(compose.desktop.currentOs)
-            }
-        }
-        val jvmTest by getting
-    }
-}
-
-compose.desktop {
-    application {
-        mainClass = "MainKt"
-        nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "NotionToBlog"
-            packageVersion = "1.0.0"
-        }
-    }
+tasks.register("clean", Delete::class) {
+    delete(rootProject.buildDir)
 }
